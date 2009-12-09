@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Windows.Forms;
 namespace Minesweeper
 {
     class Game : System.Windows.Forms.Panel
@@ -24,6 +24,7 @@ namespace Minesweeper
                 for( int y = 0; y < height; y++ )
                 {
                     grid[ x, y ] = new Square( x, y, d );
+                    grid[ x, y ].TriggerSurroundingSquares += new Square.TriggerSurroundingSquaresHandler( Game_TriggerSurroundingSquares );
                     this.Controls.Add( grid[ x, y ] );
                 }
             }
@@ -83,8 +84,62 @@ namespace Minesweeper
                 }
             }
 
+            //TriggerAll( );
+
             int mc = mineCount( );
             int sc = gridHeight * gridWidth;
+        }
+
+        void Game_TriggerSurroundingSquares( object sender, Square.TriggerSurroundingSquaresEventArgs e )
+        {
+            int x = e.X;
+            int y = e.Y;
+            int height = this.gridHeight;
+            int width = this.gridWidth;
+
+            if( x != 0 )
+            {
+                if( !grid[ x - 1, y ].Checked )  
+                    grid[ x - 1, y ].Trigger( );
+            }
+
+            if( y != 0 )
+            {
+                if( !grid[ x, y - 1 ].Checked ) 
+                grid[ x, y - 1 ].Trigger( );
+            }
+
+            if( y != 0 && x != 0 )
+            {
+                if( !grid[ x - 1, y - 1 ].Checked ) 
+                grid[ x - 1, y - 1 ].Trigger( );
+            }
+
+            if( ( y + 1 ) != height )
+            {
+                if( !grid[ x, y + 1 ].Checked ) 
+                grid[ x, y + 1 ].Trigger( );
+            }
+            if( ( x + 1 ) != width )
+            {
+                if( !grid[ x + 1, y ].Checked ) 
+                grid[ x + 1, y ].Trigger( );
+            }
+            if( ( x + 1 ) != width && y != 0 )
+            {
+                if( !grid[ x + 1, y - 1 ].Checked ) 
+                grid[ x + 1, y - 1 ].Trigger( );
+            }
+            if( ( y + 1 ) != height && x != 0 )
+            {
+                if( !grid[ x - 1, y + 1 ].Checked ) 
+                grid[ x - 1, y + 1 ].Trigger( );
+            }
+            if( ( x + 1 ) != width && ( y + 1 ) != height )
+            {
+                if( !grid[ x + 1, y + 1 ].Checked ) 
+                grid[ x + 1, y + 1 ].Trigger( );
+            }
         }
 
         public int mineCount( )
@@ -103,7 +158,7 @@ namespace Minesweeper
 
         public enum Difficulty
         {
-            STUPIDLYHARD = 1,
+            STUPIDLYHARD = 2,
             IMPOSSIBLE = 3,
             INSANE = 4,
             EXPERT = 5,
@@ -112,6 +167,14 @@ namespace Minesweeper
             EASY = 8,
             PISH = 9,
             BABY = 10
+        }
+
+        public void TriggerAll( )
+        {
+            foreach( Square item in grid )
+            {
+                item.Trigger( );
+            }
         }
     }
 }

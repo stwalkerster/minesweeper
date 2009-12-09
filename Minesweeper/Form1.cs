@@ -72,5 +72,11 @@ namespace Minesweeper
             toolStripContainer1.ContentPanel.Controls.Add( game );
             game.Dock = DockStyle.Fill;
         }
+
+        private void toolStripButton1_Click( object sender, EventArgs e )
+        {
+            ( (Game)toolStripContainer1.ContentPanel.Controls[ 0 ] ).TriggerAll( );
+        }
+
     }
 }
