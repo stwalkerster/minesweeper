@@ -11,6 +11,20 @@ namespace Minesweeper
         bool _isMine;
         int _surroundingCount, _X, _Y;
 
+        bool _isFlagged = false;
+
+        public bool isFlagged
+        {
+            get
+            {
+                return _isFlagged;
+            }
+            set
+            {
+                _isFlagged = value;
+            }
+        }
+
         public const int SIZE = 25;
 
         public bool isMine
@@ -44,7 +58,7 @@ namespace Minesweeper
             }
         }
 
-        public Square(int xPos, int yPos , Game.Difficulty d)
+        public Square( int xPos, int yPos, Game.Difficulty d )
         {
             if( Program.random( (int)d ) == 0 )
             {
@@ -64,37 +78,63 @@ namespace Minesweeper
 
             _X = xPos;
             _Y = yPos;
+
+
+
+            ContextMenuStrip = new ContextMenuStrip( );
+
+            EventHandler ehDig = new EventHandler( Menu_Dig );
+            ContextMenuStrip.Items.Add( new ToolStripMenuItem( "Dig", Minesweeper.Properties.Resources.down, ehDig ) );
+
+        
+            EventHandler ehFlag = new EventHandler( Menu_Flag );
+            ContextMenuStrip.Items.Add( new ToolStripMenuItem( "Flag", Minesweeper.Properties.Resources.flag, ehFlag ) );
         }
 
-        protected override void OnClick(EventArgs e)
+        void Menu_Dig( object sender, EventArgs e )
         {
-            base.OnClick( e );
+            Trigger( );
+            if( this.isMine )
+                MineTriggered( this, new MineSquareEventArgs( _X, _Y ) );
         }
 
-        protected override void OnMouseClick( MouseEventArgs e )
+        void Menu_Flag( object sender, EventArgs e )
         {
-            base.OnMouseClick( e );
-            if( e.Button == MouseButtons.Right )
+            if( !_isFlagged )
             {
-                
+                isFlagged = true;
+                Image = Minesweeper.Properties.Resources.flag;
             }
             else
             {
-                Trigger( );
-                if( this.isMine )
-                    MineTriggered( this, new MineSquareEventArgs( _X, _Y ) );
+                isFlagged = false;
+                Image = null;
             }
         }
 
+        protected override void OnMouseDown( MouseEventArgs mevent )
+        {
+            if( !Checked )
+                ContextMenuStrip.Show( this, mevent.Location );
+        }
+
+
+
         public void Trigger( )
         {
+            // don't bother doing this lot again!
+            if( Checked == true )
+                return;
+
+            this.ContextMenuStrip = null;
+
             this.Checked = true;
             this.BackColor = DefaultBackColor;
 
             if( this.isMine )
             {
                 this.BackColor = Color.Red;
-
+                this.Image = Minesweeper.Properties.Resources.core;
             }
             else
             {

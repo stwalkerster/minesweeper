@@ -71,6 +71,7 @@ namespace Minesweeper
             Game game = new Game( width, height, difficulty );
             toolStripContainer1.ContentPanel.Controls.Add( game );
             game.Dock = DockStyle.Fill;
+            toolStripLabel1.Text = game.mineCount( ).ToString( ) + " mines.";
         }
 
         private void toolStripButton1_Click( object sender, EventArgs e )
@@ -82,6 +83,8 @@ namespace Minesweeper
         {
             new AboutBox( ).ShowDialog( );
         }
+
+
 
     }
 }

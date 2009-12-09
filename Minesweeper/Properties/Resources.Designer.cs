@@ -88,9 +88,30 @@ namespace Minesweeper.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap down {
+            get {
+                object obj = ResourceManager.GetObject("down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap flag {
             get {
                 object obj = ResourceManager.GetObject("flag", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap linewidth {
+            get {
+                object obj = ResourceManager.GetObject("linewidth", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap redled {
+            get {
+                object obj = ResourceManager.GetObject("redled", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
