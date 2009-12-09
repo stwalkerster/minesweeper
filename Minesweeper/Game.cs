@@ -25,6 +25,7 @@ namespace Minesweeper
                 {
                     grid[ x, y ] = new Square( x, y, d );
                     grid[ x, y ].TriggerSurroundingSquares += new Square.TriggerSurroundingSquaresHandler( Game_TriggerSurroundingSquares );
+                    grid[ x, y ].MineTriggered += new EventHandler( Game_MineTriggered );
                     this.Controls.Add( grid[ x, y ] );
                 }
             }
@@ -90,7 +91,13 @@ namespace Minesweeper
             int sc = gridHeight * gridWidth;
         }
 
-        void Game_TriggerSurroundingSquares( object sender, Square.TriggerSurroundingSquaresEventArgs e )
+        void Game_MineTriggered( object sender, EventArgs e )
+        {
+            TriggerAll( );
+            MessageBox.Show( "You Have Lost, Please Die Now" );
+        }
+
+        void Game_TriggerSurroundingSquares( object sender, Square.MineSquareEventArgs e )
         {
             int x = e.X;
             int y = e.Y;

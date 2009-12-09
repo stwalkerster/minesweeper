@@ -69,7 +69,21 @@ namespace Minesweeper
         protected override void OnClick(EventArgs e)
         {
             base.OnClick( e );
-            Trigger( );
+        }
+
+        protected override void OnMouseClick( MouseEventArgs e )
+        {
+            base.OnMouseClick( e );
+            if( e.Button == MouseButtons.Right )
+            {
+                
+            }
+            else
+            {
+                Trigger( );
+                if( this.isMine )
+                    MineTriggered( this, new MineSquareEventArgs( _X, _Y ) );
+            }
         }
 
         public void Trigger( )
@@ -80,6 +94,7 @@ namespace Minesweeper
             if( this.isMine )
             {
                 this.BackColor = Color.Red;
+
             }
             else
             {
@@ -91,7 +106,7 @@ namespace Minesweeper
                         TriggerSurroundingSquaresHandler temp = TriggerSurroundingSquares;
                         if( temp != null )
                         {
-                            temp( this, new TriggerSurroundingSquaresEventArgs( _X, _Y ) );
+                            temp( this, new MineSquareEventArgs( _X, _Y ) );
                         }
                         break;
                     case 1:
@@ -122,12 +137,12 @@ namespace Minesweeper
             }
         }
 
-        public delegate void TriggerSurroundingSquaresHandler( object sender, TriggerSurroundingSquaresEventArgs e );
+        public delegate void TriggerSurroundingSquaresHandler( object sender, MineSquareEventArgs e );
         public event TriggerSurroundingSquaresHandler TriggerSurroundingSquares;
-
-        public class TriggerSurroundingSquaresEventArgs : EventArgs
+        public event EventHandler MineTriggered;
+        public class MineSquareEventArgs : EventArgs
         {
-            public TriggerSurroundingSquaresEventArgs( int x, int y )
+            public MineSquareEventArgs( int x, int y )
             {
                 _posX = x;
                 _posY = y;
