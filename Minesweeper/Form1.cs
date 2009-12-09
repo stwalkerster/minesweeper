@@ -78,5 +78,10 @@ namespace Minesweeper
             ( (Game)toolStripContainer1.ContentPanel.Controls[ 0 ] ).TriggerAll( );
         }
 
+        private void toolStripButton2_Click( object sender, EventArgs e )
+        {
+            new AboutBox( ).ShowDialog( );
+        }
+
     }
 }
