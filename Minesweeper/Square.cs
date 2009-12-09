@@ -8,6 +8,7 @@ namespace Minesweeper
     class Square : System.Windows.Forms.Button
     {
         bool _isMine;
+        int _surroundingCount;
 
         public const int SIZE = 20;
 
@@ -23,6 +24,26 @@ namespace Minesweeper
             }
         }
 
+        public int surroundingCount
+        {
+            get
+            {
+                return _surroundingCount;
+            }
+            set
+            {
+                if( value < 9 )
+                {
+                    _surroundingCount = value;
+                    this.Text = value.ToString();
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException( );
+                }
+            }
+        }
+
         public Square(int xPos, int yPos , Game.Difficulty d)
         {
             if( Program.random( (int)d ) == 0 )
@@ -35,7 +56,6 @@ namespace Minesweeper
             this.Height = SIZE;
             this.Left = xPos * SIZE;
             this.Top = yPos * SIZE;
-            this.Text = "8";
             this.Font = new System.Drawing.Font( new System.Drawing.FontFamily( System.Drawing.Text.GenericFontFamilies.Monospace ), 10, System.Drawing.FontStyle.Bold );
         }
 

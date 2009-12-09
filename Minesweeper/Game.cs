@@ -10,37 +10,91 @@ namespace Minesweeper
         readonly int gridWidth;
         readonly int gridHeight;
 
-        Square[,] grid;
+        Square[ , ] grid;
 
-        public Game(int width, int height, Difficulty d)
+        public Game( int width, int height, Difficulty d )
         {
-            InitializeComponent();
-
             gridHeight = height;
             gridWidth = width;
 
-            grid = new Square[width, height];
-            for (int x = 0; x < width; x++)
+            // instantiate minefield
+            grid = new Square[ width, height ];
+            for( int x = 0; x < width; x++ )
             {
-                for (int y = 0; y < height; y++)
+                for( int y = 0; y < height; y++ )
                 {
-                    grid[x, y] = new Square(x, y, d);
-                    this.Controls.Add(grid[x, y]);
+                    grid[ x, y ] = new Square( x, y, d );
+                    this.Controls.Add( grid[ x, y ] );
                 }
             }
 
-            int mc = mineCount();
+            // get surrounding counts
+            for( int x = 0; x < width; x++ )
+            {
+                for( int y = 0; y < height; y++ )
+                {
+                    int surroundingCount = 0;
+
+                    if( x != 0 )
+                    {
+                        if( grid[ x - 1, y ].isMine )
+                            surroundingCount++;
+                    }
+
+                    if( y != 0 )
+                    {
+                        if( grid[ x, y - 1 ].isMine )
+                            surroundingCount++;
+                    }
+
+                    if( y != 0 && x != 0 )
+                    {
+                        if( grid[ x - 1, y - 1 ].isMine )
+                            surroundingCount++;
+                    }
+
+                    if( ( y + 1 ) != height )
+                    {
+                        if( grid[ x, y + 1 ].isMine )
+                            surroundingCount++;
+                    }
+                    if( ( x + 1 ) != width )
+                    {
+                        if( grid[ x + 1, y ].isMine )
+                            surroundingCount++;
+                    }
+                    if( ( x + 1 ) != width && y != 0 )
+                    {
+                        if( grid[ x + 1, y - 1 ].isMine )
+                            surroundingCount++;
+                    }
+                    if( ( y + 1 ) != height && x != 0 )
+                    {
+                        if( grid[ x - 1, y + 1 ].isMine )
+                            surroundingCount++;
+                    }
+                    if( ( x + 1 ) != width && ( y + 1 ) != height )
+                    {
+                        if( grid[ x + 1, y + 1 ].isMine )
+                            surroundingCount++;
+                    }
+
+                    grid[ x, y ].surroundingCount = surroundingCount;
+                }
+            }
+
+            int mc = mineCount( );
             int sc = gridHeight * gridWidth;
         }
 
-        public int mineCount()
+        public int mineCount( )
         {
             int count = 0;
-            for (int x = 0; x < gridWidth; x++)
+            for( int x = 0; x < gridWidth; x++ )
             {
-                for (int y = 0; y < gridHeight; y++)
+                for( int y = 0; y < gridHeight; y++ )
                 {
-                    if (grid[x, y].isMine == true)
+                    if( grid[ x, y ].isMine == true )
                         count++;
                 }
             }
