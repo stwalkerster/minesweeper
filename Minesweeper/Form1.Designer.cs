@@ -68,7 +68,7 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange( new System.Windows.Forms.ToolStripItem[ ] {
             this.toolStripSplitButton1,
@@ -195,7 +195,7 @@
             this.ClientSize = new System.Drawing.Size( 407, 299 );
             this.Controls.Add( this.toolStripContainer1 );
             this.Name = "GameForm";
-            this.Text = "Form1";
+            this.Text = "Minesweeper";
             this.toolStripContainer1.TopToolStripPanel.ResumeLayout( false );
             this.toolStripContainer1.TopToolStripPanel.PerformLayout( );
             this.toolStripContainer1.ResumeLayout( false );
