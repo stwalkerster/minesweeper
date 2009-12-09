@@ -17,7 +17,7 @@ namespace Minesweeper
             
             Application.EnableVisualStyles( );
             Application.SetCompatibleTextRenderingDefault( false );
-            Application.Run( new Game(15,20,Game.Difficulty.IMPOSSIBLE ) );
+            Application.Run( new GameForm() );
 
 
         }
