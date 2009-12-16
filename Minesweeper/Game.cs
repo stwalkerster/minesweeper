@@ -10,6 +10,10 @@ namespace Minesweeper
         readonly int gridWidth;
         readonly int gridHeight;
 
+      public  Timer t = new Timer(  );
+
+        bool gameOver = false;
+
         Square[ , ] grid;
 
         public Game( int width, int height, Difficulty d )
@@ -89,12 +93,20 @@ namespace Minesweeper
 
             int mc = mineCount( );
             int sc = gridHeight * gridWidth;
+
+            
+            t.Interval = 1000;
         }
 
         void Game_MineTriggered( object sender, EventArgs e )
         {
             TriggerAll( );
-            MessageBox.Show( "You Have Lost, Please Die Now" );
+            if( !gameOver )
+            {
+                gameOver = true;
+                MessageBox.Show( "You Have Lost, Please Die Now" );
+                t.Stop( );
+            }
         }
 
         void Game_TriggerSurroundingSquares( object sender, Square.MineSquareEventArgs e )
@@ -168,12 +180,12 @@ namespace Minesweeper
             STUPIDLYHARD = 2,
             IMPOSSIBLE = 3,
             INSANE = 4,
-            EXPERT = 5,
-            HARD = 6,
-            MEDIOCRE = 7,
-            EASY = 8,
-            PISH = 9,
-            BABY = 10
+            EXPERT = 8,
+            HARD = 16,
+            MEDIOCRE = 32,
+            EASY = 64,
+            PISH = 128,
+            BABY = 256
         }
 
         public void TriggerAll( )

@@ -89,13 +89,18 @@ namespace Minesweeper
         
             EventHandler ehFlag = new EventHandler( Menu_Flag );
             ContextMenuStrip.Items.Add( new ToolStripMenuItem( "Flag", Minesweeper.Properties.Resources.flag, ehFlag ) );
+
+            EventHandler ehTrigger = new EventHandler( Menu_TriggerSurrounding );
+            ContextMenuStrip.Items.Add( new ToolStripMenuItem( "Trigger Surroundings", Minesweeper.Properties.Resources.redled, ehTrigger ) );
+
+            ContextMenuStrip.Items[ 2 ].Enabled = false;
         }
 
         void Menu_Dig( object sender, EventArgs e )
         {
+
             Trigger( );
-            if( this.isMine )
-                MineTriggered( this, new MineSquareEventArgs( _X, _Y ) );
+
         }
 
         void Menu_Flag( object sender, EventArgs e )
@@ -103,41 +108,65 @@ namespace Minesweeper
             if( !_isFlagged )
             {
                 isFlagged = true;
+                ContextMenuStrip.Items[ 0 ].Enabled = false;
                 Image = Minesweeper.Properties.Resources.flag;
             }
             else
             {
+                ContextMenuStrip.Items[ 0 ].Enabled = true;
                 isFlagged = false;
                 Image = null;
             }
         }
 
+        void Menu_TriggerSurrounding( object sender, EventArgs e )
+        {
+            TriggerSurroundingSquares( this, new MineSquareEventArgs( _X, _Y ) );
+        }
+
         protected override void OnMouseDown( MouseEventArgs mevent )
         {
-            if( !Checked )
+
                 ContextMenuStrip.Show( this, mevent.Location );
+
         }
 
 
 
         public void Trigger( )
         {
+            // don't detonate if flagged
+            if( isFlagged && isMine )
+                return;
+
             // don't bother doing this lot again!
             if( Checked == true )
                 return;
 
-            this.ContextMenuStrip = null;
-
             this.Checked = true;
             this.BackColor = DefaultBackColor;
+
+            ContextMenuStrip.Items[ 0 ].Enabled = false;
+            ContextMenuStrip.Items[ 1 ].Enabled = false;
+            ContextMenuStrip.Items[ 2 ].Enabled = true;
 
             if( this.isMine )
             {
                 this.BackColor = Color.Red;
-                this.Image = Minesweeper.Properties.Resources.core;
+                if( isFlagged )
+                {
+                    this.Image = Minesweeper.Properties.Resources.alert;
+                }
+                else
+                {
+                    this.Image = Minesweeper.Properties.Resources.core;
+                }
+                MineTriggered( this, new MineSquareEventArgs( _X, _Y ) );
+
             }
             else
             {
+                ((Game)Parent).t.Start();
                 this.Text = surroundingCount.ToString( );
                 switch( surroundingCount )
                 {
