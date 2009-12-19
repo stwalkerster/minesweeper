@@ -18,6 +18,14 @@ namespace Minesweeper
             InitializeComponent( );
         }
 
+        public int Time
+        {
+            get
+            {
+                return time;
+            }
+        }
+
         private void stupidlyHardToolStripMenuItem_Click( object sender, EventArgs e )
         {
             startNewGame( Game.Difficulty.STUPIDLYHARD );

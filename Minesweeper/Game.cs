@@ -10,7 +10,7 @@ namespace Minesweeper
         readonly int gridWidth;
         readonly int gridHeight;
 
-      public  Timer t = new Timer(  );
+        public Timer t = new Timer( );
 
         bool gameOver = false;
 
@@ -29,6 +29,7 @@ namespace Minesweeper
                 {
                     grid[ x, y ] = new Square( x, y, d );
                     grid[ x, y ].TriggerSurroundingSquares += new Square.TriggerSurroundingSquaresHandler( Game_TriggerSurroundingSquares );
+                    grid[ x, y ].SquareTriggered += new Square.TriggerSurroundingSquaresHandler( Game_SquareTriggered );
                     grid[ x, y ].MineTriggered += new EventHandler( Game_MineTriggered );
                     this.Controls.Add( grid[ x, y ] );
                 }
@@ -94,8 +95,48 @@ namespace Minesweeper
             int mc = mineCount( );
             int sc = gridHeight * gridWidth;
 
-            
+
             t.Interval = 1000;
+        }
+
+        void Game_SquareTriggered( object sender, Square.MineSquareEventArgs e )
+        {
+            if( gameOver == true )
+                return;
+
+
+            int untriggeredCount=0;
+
+            // get count of total untriggered squares
+            foreach( Square item in grid )
+            {
+                if( item.Checked == false )
+                    untriggeredCount++;
+            }
+
+            // get count of mines
+            // this.mineCount();
+
+            // if untriggered square count <= mine count, game is won.
+            if( untriggeredCount == mineCount( ) )
+            {
+                gameOver = true;
+                
+                // stop timer
+                t.Stop( );
+
+                // fetch time
+                int time = ((GameForm)Parent.Parent.Parent).Time;
+
+                foreach( Square item in grid )
+                {
+                    item.autoFlag( this, new EventArgs( ) );
+                }
+
+                // WOOOOOOOO!!!!!
+                MessageBox.Show( string.Format( "Yay! You won the game!\n\nYour final time was: {0}", time.ToString( ) ) );
+            }
+
         }
 
         void Game_MineTriggered( object sender, EventArgs e )
@@ -118,46 +159,46 @@ namespace Minesweeper
 
             if( x != 0 )
             {
-                if( !grid[ x - 1, y ].Checked )  
+                if( !grid[ x - 1, y ].Checked )
                     grid[ x - 1, y ].Trigger( );
             }
 
             if( y != 0 )
             {
-                if( !grid[ x, y - 1 ].Checked ) 
-                grid[ x, y - 1 ].Trigger( );
+                if( !grid[ x, y - 1 ].Checked )
+                    grid[ x, y - 1 ].Trigger( );
             }
 
             if( y != 0 && x != 0 )
             {
-                if( !grid[ x - 1, y - 1 ].Checked ) 
-                grid[ x - 1, y - 1 ].Trigger( );
+                if( !grid[ x - 1, y - 1 ].Checked )
+                    grid[ x - 1, y - 1 ].Trigger( );
             }
 
             if( ( y + 1 ) != height )
             {
-                if( !grid[ x, y + 1 ].Checked ) 
-                grid[ x, y + 1 ].Trigger( );
+                if( !grid[ x, y + 1 ].Checked )
+                    grid[ x, y + 1 ].Trigger( );
             }
             if( ( x + 1 ) != width )
             {
-                if( !grid[ x + 1, y ].Checked ) 
-                grid[ x + 1, y ].Trigger( );
+                if( !grid[ x + 1, y ].Checked )
+                    grid[ x + 1, y ].Trigger( );
             }
             if( ( x + 1 ) != width && y != 0 )
             {
-                if( !grid[ x + 1, y - 1 ].Checked ) 
-                grid[ x + 1, y - 1 ].Trigger( );
+                if( !grid[ x + 1, y - 1 ].Checked )
+                    grid[ x + 1, y - 1 ].Trigger( );
             }
             if( ( y + 1 ) != height && x != 0 )
             {
-                if( !grid[ x - 1, y + 1 ].Checked ) 
-                grid[ x - 1, y + 1 ].Trigger( );
+                if( !grid[ x - 1, y + 1 ].Checked )
+                    grid[ x - 1, y + 1 ].Trigger( );
             }
             if( ( x + 1 ) != width && ( y + 1 ) != height )
             {
-                if( !grid[ x + 1, y + 1 ].Checked ) 
-                grid[ x + 1, y + 1 ].Trigger( );
+                if( !grid[ x + 1, y + 1 ].Checked )
+                    grid[ x + 1, y + 1 ].Trigger( );
             }
         }
 

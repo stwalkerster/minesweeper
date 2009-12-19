@@ -131,7 +131,13 @@ namespace Minesweeper
 
         }
 
-
+        public void autoFlag( object sender, EventArgs e)
+        {
+            if( this.Checked == false )
+            {
+                Menu_Flag( sender, e );
+            }
+        }
 
         public void Trigger( )
         {
@@ -204,11 +210,16 @@ namespace Minesweeper
                         break;
                 }
             }
+
+            SquareTriggered( this, new MineSquareEventArgs( this._X, this._Y ) );
         }
 
         public delegate void TriggerSurroundingSquaresHandler( object sender, MineSquareEventArgs e );
         public event TriggerSurroundingSquaresHandler TriggerSurroundingSquares;
         public event EventHandler MineTriggered;
+
+        public event TriggerSurroundingSquaresHandler SquareTriggered;
+
         public class MineSquareEventArgs : EventArgs
         {
             public MineSquareEventArgs( int x, int y )
